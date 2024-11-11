@@ -23,4 +23,19 @@ with open(file_path, 'r', encoding='utf-8') as file:
     else:
         cook_book[temp_dish[0]] = temp_dish[2:]
 
-pprint(cook_book)
+def get_shop_list_by_dishes(dishes: list, person_count: int) -> dict:
+    shop_list = {}
+    for dish in dishes:
+        if dish in cook_book:
+            for ingredient in cook_book[dish]:
+                ingredient_name = ingredient['ingredient_name']
+                if ingredient_name not in shop_list:
+                    shop_list[ingredient_name] = {'measure': ingredient['measure'],
+                                                  'quantity': int(ingredient['quantity'] * person_count)}
+                else:
+                    shop_list[ingredient_name]['quantity'] += int(ingredient['quantity'] * person_count)
+        else:
+            print(f'Блюдо "{dish}" отсутствует в книге рецептов')
+    return shop_list
+
+pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
